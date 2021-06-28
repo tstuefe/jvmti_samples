@@ -13,26 +13,29 @@
 
 #define LOG(s)  { printf s; printf("\n"); fflush(stdout); }
 
-static void you_get_paid_either_way() {
+volatile void* p1 = NULL;
+volatile void* p2 = NULL;
+
+static void leak_malloc() {
 	for (int i = 0; i < 1024; i ++) 
-		malloc(rand() % 32);
+		p1 = malloc(rand() % 32);
 }
 
-static void sap_finds_your_bugs_for_you() {
-	you_get_paid_either_way();
+static void leakleak() {
+	leak_malloc();
 }
 
 static void and_leak_like_you_dont_care() {
-	sap_finds_your_bugs_for_you();
+	leakleak();
 }
 
-static void throw_your_arms_in_the_air() {
+static void throw_your_hands_in_the_air() {
 	and_leak_like_you_dont_care();
 }
 
 static void* leaky_thread(void* dummy) {
 	for (;;) {
-		throw_your_arms_in_the_air();
+		throw_your_hands_in_the_air();
 		sleep(1);
 	}
 }
